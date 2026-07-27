@@ -1,0 +1,18 @@
+<li class="filter-discount">
+    <div class="form-extra-field dropdown">
+        <button class="btn btn-link dropdown" type="button" id="dropdownMenuDiscount" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <?php echo esc_html($title); ?> <i class="fa fa-angle-down" aria-hidden="true"></i>
+        </button>
+        <div class="dropdown-menu st-icheck" aria-labelledby="dropdownMenuDiscount">
+            <ul>
+                <li class="st-icheck-item">
+                    <label>
+                        <?php echo __('Discount', 'traveler'); ?>
+                        <input type="checkbox" name="discount_only" data-type="discount" value="1" class="filter-item"/>
+                        <span class="checkmark fcheckbox"></span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</li>
