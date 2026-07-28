@@ -45,7 +45,7 @@
         this.maxYear = 1450;
         this.showWeekNumbers = false;
         this.showISOWeekNumbers = false;
-        this.timePicker = true; // فعال‌سازی تایم‌پیکر
+        this.timePicker = true; 
         this.timePickerIncrement = 1;
         this.timePicker24Hour = true;
         this.timePickerSeconds = false;
@@ -142,7 +142,6 @@
     DateRangePicker.prototype = {
         constructor: DateRangePicker,
 
-        // متدهای کمکی برای جلوگیری از Throw شدن خطا در صورت لود نشدن moment-jalaali
         getJalaliMonth: function (m) {
             return (this.calendarType === 'solar' && typeof m.jMonth === 'function') ? m.jMonth() : m.month();
         },
