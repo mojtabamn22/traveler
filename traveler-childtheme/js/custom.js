@@ -8,27 +8,23 @@
         return decodeURIComponent(results[1]) || null;
     }
 
-    // تابع اصلی همگام‌سازی فیلدهای مخفی
     function syncCarHiddenInputs(picker, $input) {
         if (!picker) return;
         var $form = $input.closest('form');
         if (!$form.length) $form = $('form.has-match-height, form.form-booking-car, .st-single-plugin form');
 
         if (picker.startDate && picker.endDate) {
-            // تبدیل تاریخ به فرمت میلادی مورد نیاز قالب
             var startGregorian = picker.startDate.clone().locale('en').format('YYYY/MM/DD');
             var endGregorian = picker.endDate.clone().locale('en').format('YYYY/MM/DD');
 
             var startTime = picker.startDate.format('hh:mm A');
             var endTime = picker.endDate.format('hh:mm A');
 
-            // ۱. مقداردهی فیلدهای اختصاصی خودرو
             $form.find('input[name="pick-up-date"]').val(startGregorian);
             $form.find('input[name="drop-off-date"]').val(endGregorian);
             $form.find('input[name="pick-up-time"]').val(startTime);
             $form.find('input[name="drop-off-time"]').val(endTime);
 
-            // ۲. مقداردهی فیلدهای عمومی هتل/تور
             $form.find('input[name="check_in"], input[name="start"]').val(startGregorian);
             $form.find('input[name="check_out"], input[name="end"]').val(endGregorian);
             $form.find('input[name="check_in_time"]').val(startTime);
@@ -39,7 +35,6 @@
     $.fn.daterangepicker = function (options, cb) {
         options = options || {};
 
-        // پاکسازی تقویم‌های قبلی
         this.each(function () {
             var $input = $(this);
             var oldPicker = $input.data('daterangepicker');
@@ -78,7 +73,6 @@
         mergedOptions.locale.daysOfWeek = defaultLocale.daysOfWeek;
         mergedOptions.showDropdowns = false;
 
-        // بررسی کانتینرهای inline
         var $parentContainer = this.closest('.rate-calendar, .st-calendar');
         if ($parentContainer.length) {
             mergedOptions.parentEl = $parentContainer;
@@ -127,7 +121,6 @@
             }
         });
 
-        // فراخوانی متد اصلی
         var res = origDaterangepicker.call(this, mergedOptions, cb);
 
         this.each(function () {
@@ -135,15 +128,12 @@
             var picker = $input.data('daterangepicker');
             if (!picker) return;
 
-            // ۱. همگام‌سازی در لحظه لود اول
             syncCarHiddenInputs(picker, $input);
 
-            // ۲. گوش دادن به رویداد تغییر/اعمال تقویم
             $input.on('apply.daterangepicker change', function () {
                 syncCarHiddenInputs(picker, $input);
             });
 
-            // ۳. کلید حل مشکل: به محض کلیک روی سلول‌های تقویم، فیلدها آنی آپدیت شوند
             if (picker.container) {
                 picker.container.on('click', '.day', function () {
                     setTimeout(function () {
@@ -176,14 +166,12 @@
 
 jQuery(document).ready(function ($) {
 
-    // ۱. بستن خودکار تقویم پس از انتخاب بازه تاریخ (Apply/Selection)
     $(document).on('apply.daterangepicker', 'input.check-in-out, input[name="date"]', function (ev, picker) {
         if (picker && picker.container && !picker.inline) {
             picker.container.hide();
         }
     });
 
-    // ۲. باز کردن تقویم فقط هنگام کلیک روی باکس تاریخ
     var dateBoxSelector = '.check-in-wrapper, .render-check-in-render, .render-check-out-render, .st-item-date, .st_grid_date';
 
     document.addEventListener('click', function (e) {
@@ -217,7 +205,6 @@ jQuery(document).ready(function ($) {
         }
     }, true);
 
-    // ۳. بستن تقویم هنگام کلیک در بیرون از آن
     $(document).on('click', function (e) {
         if (!$(e.target).closest('.daterangepicker-dual, ' + dateBoxSelector).length) {
             $('.daterangepicker-dual:not(.inline-calendar):not(.dp-inline)').hide();
