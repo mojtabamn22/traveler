@@ -1,0 +1,107 @@
+/*
+Theme Name:     Traveler Childtheme
+Description:    Traveler Child Theme
+Theme URI:      https://travelerwp.com/
+Author:         the ShineTheme
+Author URI:     http://shinetheme.com
+Version:        1.0
+Template:       traveler
+*/
+/* Images */
+:root {
+    --main-color: #5191FA;
+    --grey-color: #5E6D77;
+    --light-grey-color: #EAEEF3;
+    --orange-color: #FA5636;
+    --link-color: #1A2B48;
+}
+
+.sticky {
+}
+
+.bypostauthor {
+}
+
+.alignleft {
+    float: left;
+}
+
+.alignright {
+    float: right;
+}
+
+.aligncenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+figure.wp-caption.alignleft,
+img.alignleft {
+    margin: 5px 20px 5px 0;
+}
+
+.wp-caption.alignleft {
+    margin: 5px 10px 5px 0;
+}
+
+figure.wp-caption.alignright,
+img.alignright {
+    margin: 5px 0 5px 20px;
+}
+
+.wp-caption.alignright {
+    margin: 5px 0 5px 10px;
+}
+
+img.aligncenter {
+    margin: 5px auto;
+}
+
+img.alignnone {
+    margin: 5px 0;
+}
+.wp-caption .wp-caption-text,
+.entry-caption,
+.gallery-caption {
+    color: #220e10;
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 300;
+    margin: 0 0 24px;
+}
+
+div.wp-caption.alignright img[class*="wp-image-"] {
+    float: right;
+}
+
+div.wp-caption.alignright .wp-caption-text {
+    padding-left: 10px;
+}
+
+img.wp-smiley,
+.rsswidget img {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 0;
+}
+
+.wp-caption.alignleft + ul,
+.wp-caption.alignleft + ol {
+    list-style-position: inside;
+}
+
+@media (max-width: 767px) {
+    #tpcwl_wrapper {
+        height: auto !important;
+
+    }
+
+    #tpcwl_wrapper > iframe {
+        top: 0px !important;
+        position: relative !important;
+    }
+}
