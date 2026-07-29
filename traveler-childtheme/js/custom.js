@@ -42,9 +42,10 @@
                 oldPicker.container.remove();
                 $input.removeData('daterangepicker');
             }
-            var $parentContainer = $input.closest('.rate-calendar-style-1, .st-availability-calendar-wrapper, .st-calendar');
-            if ($parentContainer.length) {
-                $parentContainer.find('.daterangepicker-dual, .daterangepicker').remove();
+            // پاکسازی ایزوله فقط روی تقویم‌های Inline واقعی
+            var $inlineParent = $input.closest('.rate-calendar-style-1, .rate-calendar, .st-availability-calendar-wrapper');
+            if ($inlineParent.length) {
+                $inlineParent.find('.daterangepicker-dual, .daterangepicker').remove();
             }
         });
 
@@ -73,9 +74,10 @@
         mergedOptions.locale.daysOfWeek = defaultLocale.daysOfWeek;
         mergedOptions.showDropdowns = false;
 
-        var $parentContainer = this.closest('.rate-calendar, .st-calendar');
-        if ($parentContainer.length) {
-            mergedOptions.parentEl = $parentContainer;
+        // فقط کانتینرهای تقویم صریح (مانند تقویم دسترسی) به عنوان Inline ست شوند
+        var $inlineContainer = this.closest('.rate-calendar-style-1, .rate-calendar, .st-availability-calendar-wrapper');
+        if ($inlineContainer.length) {
+            mergedOptions.parentEl = $inlineContainer;
             mergedOptions.inline = true;
         }
 
@@ -115,7 +117,7 @@
             if (parsedStart && parsedEnd) {
                 mergedOptions.startDate = parsedStart;
                 mergedOptions.endDate = parsedEnd;
-            } else {
+            } else if (today) {
                 mergedOptions.startDate = today.clone();
                 mergedOptions.endDate = today.clone().add(1, 'day');
             }
@@ -142,7 +144,7 @@
                 });
             }
 
-            var $rateContainer = $input.closest('.rate-calendar-style-1, .st-availability-calendar-wrapper, .st-calendar');
+            var $rateContainer = $input.closest('.rate-calendar-style-1, .rate-calendar, .st-availability-calendar-wrapper');
             if ($rateContainer.length > 0 && picker.container) {
                 $rateContainer.find('.daterangepicker-dual, .daterangepicker').not(picker.container).remove();
                 picker.container.addClass('inline-calendar dp-inline');
@@ -151,7 +153,7 @@
 
             var origHide = picker.hide;
             picker.hide = function (e) {
-                if (this.inline || (this.container && this.container.hasClass('inline-calendar'))) {
+                if (this.inline || (this.container && (this.container.hasClass('inline-calendar') || this.container.hasClass('dp-inline')))) {
                     return;
                 }
                 return origHide.apply(this, arguments);
@@ -161,7 +163,6 @@
         return res;
     };
 
-    
 })(jQuery);
 
 jQuery(document).ready(function ($) {
@@ -172,38 +173,38 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    var dateBoxSelector = '.check-in-wrapper, .render-check-in-render, .render-check-out-render, .st-item-date, .st_grid_date';
+    var dateBoxSelector = '.check-in-wrapper, .render-check-in-render, .render-check-out-render, .st-item-date, .st_grid_date, .form-date-field, .form-date-search';
 
-    document.addEventListener('click', function (e) {
-        var $target = $(e.target).closest(dateBoxSelector);
-        
-        if ($target.length) {
-            var $formGroup = $target.closest('.form-date-field, .form-date-search');
-            var $input = $formGroup.find('input.check-in-out, input[name="date"]').first();
+    $(document).on('click', dateBoxSelector, function (e) {
+        var $target = $(this);
+        var $formGroup = $target.closest('.form-date-field, .form-date-search, .form-group');
+        if (!$formGroup.length) $formGroup = $target;
 
-            if ($input.length) {
-                var picker = $input.data('daterangepicker');
-                if (picker && picker.container) {
-                    
-                    if (!$.contains($formGroup[0], picker.container[0])) {
-                        $formGroup.css('position', 'relative');
-                        picker.container.appendTo($formGroup);
-                    }
+        var $input = $formGroup.find('input.check-in-out, input[name="date"], input.calendar_input').first();
 
-                    picker.container.css({
-                        'top': '100%',
-                        'left': '0',
-                        'right': 'auto',
-                        'position': 'absolute',
-                        'z-index': '999999',
-                        'margin-top': '8px'
-                    }).show();
+        if ($input.length) {
+            var picker = $input.data('daterangepicker');
+            if (picker && picker.container) {
 
-                    e.stopPropagation();
+                if (!$.contains($formGroup[0], picker.container[0])) {
+                    $formGroup.css('position', 'relative');
+                    picker.container.appendTo($formGroup);
                 }
+
+                picker.container.css({
+                    'top': '100%',
+                    'left': '0',
+                    'right': 'auto',
+                    'position': 'absolute',
+                    'z-index': '999999',
+                    'margin-top': '8px',
+                    'display': 'block'
+                }).show();
+
+                e.stopPropagation();
             }
         }
-    }, true);
+    });
 
     $(document).on('click', function (e) {
         if (!$(e.target).closest('.daterangepicker-dual, ' + dateBoxSelector).length) {
